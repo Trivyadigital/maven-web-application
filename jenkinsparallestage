@@ -13,7 +13,7 @@ stage ('build')
  {
  parallel(
  sonarReport:{
-   sh " ${mavenHome}/bin/mvn  sonar:sonar
+   sh " ${mavenHome}/bin/mvn  sonar:sonar "
  }
  nexusDeploy:{
  sh "${mavenHome}/bin/mvn deploy"
