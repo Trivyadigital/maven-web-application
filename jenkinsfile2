@@ -3,7 +3,7 @@ def mavenHome = tool name : 'maven tool'
 echo "the job name is : ${env.JOB_NAME} "
 echo "the job name is : ${env.BUILD_NUMBER} "
 stage('checkout'){
-   git branch: 'development ', credentialsId: 'b89c3539-6c15-470c-958d-ea3cd7803ad1', url: 'https://github.com/Trivyadigital/maven-web-application.git'
+   git branch: 'master', credentialsId: 'b89c3539-6c15-470c-958d-ea3cd7803ad1', url: 'https://github.com/Trivyadigital/maven-web-application.git'
 }
 stage ('build')
  {
