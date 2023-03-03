@@ -1,1 +1,27 @@
-
+node{
+def mavenHome = tool name : 'maven tool'
+echo "the job name is : ${env.JOB_NAME} "
+echo "the job name is : ${env.BUILD_NUMBER} "
+stage('checkout'){
+   git branch: 'master', credentialsId: 'b89c3539-6c15-470c-958d-ea3cd7803ad1', url: 'https://github.com/Trivyadigital/maven-web-application.git'
+}
+stage ('build')
+ {
+ sh "${mavenHome}/bin/mvn clean package"
+ }
+ stage('paralle execution')
+ {
+ parallel(
+ sonarReport:{
+   sh " ${mavenHome}/bin/mvn  sonar:sonar
+ }
+ nexusDeploy:{
+ sh "${mavenHome}/bin/mvn deploy"
+ }
+ stage('deploy')
+ {
+    sshagent(['fc9893bf-f7e8-4737-bd9f-175b4a1f3404']) {
+    sh " scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@3.110.212.233:/opt/apache-tomcat-9.0.71/webapps/"
+}
+}
+}// node closing 
