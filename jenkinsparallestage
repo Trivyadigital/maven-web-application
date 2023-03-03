@@ -16,7 +16,7 @@ stage ('build')
    sh " ${mavenHome}/bin/mvn  sonar:sonar "
  }
  nexusDeploy:{
- sh "${mavenHome}/bin/mvn deploy"
+ sh " ${mavenHome}/bin/mvn deploy "
  }
  stage('deploy')
  {
