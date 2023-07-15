@@ -1,0 +1,26 @@
+node{
+    
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), pipelineTriggers([cron('* * * * *')])])
+    
+    def mavenHome = tool name : 'maven3.9.3'
+    stage('checkoutCode'){
+        git credentialsId: '57ead5eb-9580-4e3a-90c3-27cbe99a3100', url: 'https://github.com/Trivyadigital/maven-web-application.git'
+    }
+    stage('build'){
+        sh "${mavenHome}/bin/mvn clean package"
+    }
+    stage('sonarReport'){
+        sh "${mavenHome}/bin/mvn sonar:sonar"
+    }
+    stage("NexusRepository")
+    {
+        sh "${mavenHome}/bin/mvn clean deploy"
+    }
+    stage("deployappliintoTomcat")
+    {
+        sshagent(['f156fb55-1a15-4203-bf05-806e8e7d834f']) 
+        {
+     sh "scp -o strictHostKeyChecking=no target/maven-web-application.war ec2-user@172.31.47.43:/opt/apache-tomcat-9.0.76/webapps/:"
+        }
+    }
+}
