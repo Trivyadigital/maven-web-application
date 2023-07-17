@@ -9,9 +9,9 @@ node{
     stage('build'){
         sh "${mavenHome}/bin/mvn clean package"
     }
-    / *stage('sonarReport'){
+    stage('sonarReport'){
         sh "${mavenHome}/bin/mvn sonar:sonar"
-    } */
+    } 
     stage("NexusRepository")
     {
         sh "${mavenHome}/bin/mvn clean deploy"
